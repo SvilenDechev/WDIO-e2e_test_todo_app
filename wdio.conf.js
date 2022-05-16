@@ -1,3 +1,4 @@
+const dayjs = require('dayjs')
 exports.config = {
     //
     // ====================
@@ -21,7 +22,7 @@ exports.config = {
     // will be called from there.
     //
     specs: [
-        './test/specs/*.Spec.js'
+        './test/specs/learningAllyLoginBySchoolOrDistrict.Spec.js'
     ],
     // Patterns to exclude.
     exclude: [
@@ -50,14 +51,17 @@ exports.config = {
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-    
+
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
         maxInstances: 5,
         //
         browserName: 'chrome',
-        acceptInsecureCerts: true
+        acceptInsecureCerts: true,
+        'goog:chromeOptions': {
+            args: ['--window-size=1920,1080']
+        }
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
@@ -94,7 +98,7 @@ exports.config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    baseUrl: 'http://localhost',
+    baseUrl: 'https://audiobooks-staging.asteasolutions.net/',
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
@@ -111,7 +115,7 @@ exports.config = {
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
     services: ['chromedriver'],
-    
+
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
     // see also: https://webdriver.io/docs/frameworks
@@ -133,9 +137,6 @@ exports.config = {
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
     reporters: ['spec'],
-
-
-    
     //
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
@@ -237,8 +238,18 @@ exports.config = {
      * @param {Boolean} result.passed    true if test has passed, otherwise false
      * @param {Object}  result.retries   informations to spec related retries, e.g. `{ attempts: 0, limit: 0 }`
      */
-    // afterTest: function(test, context, { error, result, duration, passed, retries }) {
-    // },
+    afterTest: function (test, context, {
+        error, result, duration, passed, retries
+    }) {
+        if (!passed) {
+            console.log(`!!! The test [${test.title}] -is failed !!!`);
+            const TIME = dayjs().format('HH-mm')
+            const TEST_NAME = encodeURIComponent(test.title.replace(/\s+/g, '-').replace(/::/g, '__'));
+            const PATH = './test/screenShots/';
+            browser.saveScreenshot(`${PATH}${TEST_NAME}-${TIME}.png`);
+        }
+
+    },
 
 
     /**

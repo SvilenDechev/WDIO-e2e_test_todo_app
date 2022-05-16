@@ -1,6 +1,3 @@
-
-
-
 class ToDoPage {
 
   get task () {
@@ -31,13 +28,10 @@ class ToDoPage {
     return $('.clear-completed')
   }
   
-
-  
   async addNewTask(text) {
     await this.addNewTaskField.setValue(text)
     await browser.keys('Enter')
   }
-
 }
 
 module.exports = new ToDoPage();

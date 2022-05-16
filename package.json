@@ -1,16 +1,20 @@
 {
-    "name": "webdriverio-tests",
-    "version": "0.1.0",
-    "private": true,    
+    "name": "learning_ally",
+    "version": "1.0",
     "devDependencies": {
         "@wdio/cli": "^7.18.0",
         "@wdio/local-runner": "^7.18.0",
         "@wdio/mocha-framework": "^7.18.0",
         "@wdio/spec-reporter": "^7.18.0",
         "chromedriver": "^100.0.0000.00 ",
+        "dayjs": "^1.11.2",
         "wdio-chromedriver-service": "^7.3.1"
     },
     "scripts": {
-        "wdio": "wdio run wdio.conf.js"
+        "e2e_tests": "wdio run wdio.conf.js",
+        "e2e_tests_headless": "wdio run wdioHeadless.conf.js"
+    },
+    "dependencies": {
+        "chai": "^4.3.6"
     }
 }

@@ -1,10 +1,10 @@
 const ToDoPage = require('../pageobjects/todoHomePage');
 
-async function waitAndClick(selector) {
-    await selector.waitForExist()
-    await expect(selector).toBeClickable()
-    await selector.click()
-    await browser.pause(500)
+function waitAndClick(selector) {
+    selector.waitForExist()
+    expect(selector).toBeClickable()
+    selector.click()
+    browser.pause(500)
 }
 
 function isTaskDisplayed(taskNum) {
@@ -90,21 +90,21 @@ describe('first test', async () => {
 
     it.only('should displayed all tasks', async () => {
         await waitAndClick(ToDoPage.showAllTaskButton)
-       
+
         for (let i = 1; i < 5; i++) {
-        await expect(ToDoPage.task(i)).toBeDisplayed()
+            await expect(ToDoPage.task(i)).toBeDisplayed()
         }
     });
 
     it.only('should be clear completed', async () => {
         await waitAndClick(ToDoPage.clearCompletedButton)
-        
+
         await !expect(ToDoPage.task(1)).toHaveAttribute('class', 'completed')
         await !expect(ToDoPage.task(2)).toHaveAttribute('class', 'completed')
-        
+
         await isTaskDisplayed(1);
         await isTaskDisplayed(2);
-        
+
         await expectTaskText(1, 'To get launch')
         await expectTaskText(2, 'To write homework')
     });
